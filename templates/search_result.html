@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Results
+{% endblock %}
+
+{% block main %}
+<!-- search result page -->
+<!-- search form -->
+<div class="d-flex justify-content-center h-100">
+  <div class="card" style="width: 38rem; text-align:center;">
+    <div class="card-header">
+      <h3 class="green">Search your favorite book</h3>
+    </div>
+    <div class="card-body">
+      <form action="/search" method="post">
+        <div class="row form-group">
+          <div class="col-sm-9">
+            <input class="form-control w-100" type="text" placeholder="Search.." name="search">
+          </div>
+          <div class="col-sm-3">
+            <button class="btn btn-info w-100" type="submit"><i class="fa fa-search"></i></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Display all search results -->
+<h4 class="mt-4 mb-4 text-center">Search results</h4>
+<table class="table table-hover ml-4 mr-4">
+  <tbody>
+    {% for book  in data %}
+    <tr>
+      <td>
+        <div class="row ml-2">
+          <div style="width:120px;"><img style="width:100%" src="http://covers.openlibrary.org/b/isbn/{{book["isbn"]}}-M.jpg"></img></div>
+          <div class="ml-4">
+            <h6><a href="/book/{{ book["isbn"] }}">{{ book["title"] }}</a> ({{ book["year"] }})</h6>
+            <p>by <b>{{ book["author"] }}</b></p>
+            <p>ISBN: {{ book["isbn"] }}</p>
+            <p>{{ book["average_rating"] }} average rating - {{ book["ratings_count"] }} ratings - {{ book["review_count"] }} reviews</p>
+          </div>
+        </div>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

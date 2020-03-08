@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block title %}
+BookQuery
+{% endblock %}
+
+{% block main %}
+<!-- Search field -->
+<div class="d-flex justify-content-center h-100">
+  <div class="card" style="width: 38rem; text-align:center;">
+    <div class="card-header">
+      <h3 class="green">Search your favorite book</h3>
+    </div>
+    <div class="card-body">
+      <form action="/search" method="post">
+        <div class="row form-group">
+          <div class="col-sm-9">
+            <input class="form-control ml-2 w-100" type="text" placeholder="Search.." name="search">
+          </div>
+          <div class="col-sm-3">
+            <button class="btn btn-info w-100" type="submit"><i class="fa fa-search"></i></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- introduce about the features of the website (as a guideline)
+if the index is for everybody then search only when user login ("Login to search, No account, register for one")
+query the list of top 10 rated books (at least 100 ratings) on goodreads with images and original descriptions of the books -->
+{% endblock %}

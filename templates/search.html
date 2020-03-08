@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% block title %}
+index
+{% endblock %}
+
+{% block main %}
+<div class="d-flex justify-content-center h-100">
+  <div class="card">
+    <div class="card-header">
+      <h5 class="lightblue text-center">Can't find "{{ search_text }}" in our database!</h5>
+    </div>
+    <div class="card-body">
+      <h6 class="text-center mb-3">Try another alternative search engine:</h6>
+        <form method="post">
+          <div class="col-sm-12">
+            <input class="form-control w-100" type="text" placeholder="{{ search_text }}" name="search" value="{{ search_text }}">
+          </div>
+          <button class="btn btn-search" type="submit" formaction="/"><i class="fa fa-search"></i> Re-search</button>
+          <button class="btn btn-search" type="submit" formaction="/google_search"><i class="fab fa-google"></i> Google</button>
+          <button class="btn btn-search" type="submit" formaction="/gr_search"><i class="fab fa-goodreads"></i> Goodreads</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

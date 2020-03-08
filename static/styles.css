@@ -1,0 +1,65 @@
+nav .navbar-brand
+{
+    font-size: xx-large;
+}
+
+.gray {
+  color: #696969;
+}
+
+
+.lightblue {
+  color: #563d7c;
+}
+
+
+.green {
+  color: #03fc6b;
+}
+
+.red {
+  color: #ff0000;
+}
+
+.violet {
+  color: #8a2be2;
+}
+
+.yellow {
+  color: #ffff00;
+}
+
+.orange {
+  color: #ffa500;
+}
+
+.lightyellow {
+  color: #cce320;
+}
+
+.table-row {
+  border-spacing: 2px;
+}
+
+main .form-control
+{
+    /* center form controls */
+    display: inline-block;
+
+    /* override Bootstrap's 100% width for form controls */
+    width: auto;
+}
+
+.qsmall-book {
+
+}
+
+.footer-link {
+    padding: 0 10px;
+}
+
+@media screen and (max-width:600px) {
+  .qsmall-book {
+    text-align: center;
+  }
+}

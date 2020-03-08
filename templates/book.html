@@ -1,0 +1,244 @@
+{% extends "layout.html" %}
+
+{% block title %}
+{{ book["title"] }}
+{% endblock %}
+
+{% block main %}
+<!-- Search field -->
+<div class="d-flex justify-content-center h-100">
+  <div class="card" style="width: 38rem; text-align:center;">
+    <div class="card-header">
+      <h3 class="green">Search your favorite book</h3>
+    </div>
+    <div class="card-body">
+      <form action="/search" method="post">
+        <div class="row form-group">
+          <div class="col-sm-9">
+            <input class="form-control w-100" type="text" placeholder="Search.." name="search">
+          </div>
+          <div class="col-sm-3">
+            <button class="btn btn-info w-100" type="submit"><i class="fa fa-search"></i></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Book information -->
+<div class="row book-container mt-4">
+  <div class="col-sm-5 text-center">
+    <img class="big-cover" src="http://covers.openlibrary.org/b/isbn/{{book["isbn"]}}-M.jpg"></img>
+    <div>
+      {% if user_rating[0] == NULL %}
+      <!-- if the user has not rated, display a rate form  -->
+      <form method="POST" action="/rating">
+        <input type="hidden" name="isbn" value="{{ book["isbn"] }}">
+        <div class="mt-2 mb-2">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">You rate:</span>
+            </div>
+            <select class="form-control" name="rating" id="ratings">
+              <option value=1>1</option>
+              <option value=2>2</option>
+              <option value=3>3</option>
+              <option value=4>4</option>
+              <option selected value=5>5</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary mt-2">Rate this book</button>
+        </div>
+      </form>
+      {% else %}
+      <!-- if so, dispay the user vote infor  -->
+      <div class="mt-3">
+        <p>You rated: {{ user_rating[0] }} stars</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+  <!-- Infor of the book including isbn, title, ratings, reviews -->
+  <div class="col-sm-7 qsmall-book">
+    <div class="row">
+      <div class="col-sm-12">
+        <h4><a href="/book/{{ book["isbn"] }}">{{ book["title"] }}</a> ({{ book["year"] }})</h4>
+        <p>by <b>{{ book["author"] }}</b></p>
+        <p>ISBN: {{ book["isbn"] }}</p>
+      </div>
+      <table class="table">
+        <tbody>
+          <tr>
+            <td>
+              <h6>BookQuery</h6>
+              <p>{{ book["average_rating"] }} avg rating</p>
+              <p>{{ book["ratings_count"] }} ratings</p>
+              <p>{{ book["review_count"] }} reviews</p>
+            </td>
+            <td>
+              <h6><a href=" https://www.goodreads.com/book/isbn/{{ book["isbn"] }}">Goodreads</a></h6>
+              <p>{{ book_rc["average_rating"] }} avg rating</p>
+              <p>{{ book_rc["work_ratings_count"] }} ratings</p>
+              <p>{{ book_rc["reviews_count"]}} reviews</p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="text-ceter">
+        <a class="btn btn-primary" href="#reviews" role="button">Write a review</a>
+        <a class="btn btn-primary" href="#qas" role="button">Ask a questions</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- reviews -->
+<div class="mt-5 w-100" id="reviews">
+  <h4 class="alert alert-success text-center w-100">Reviews</h4>
+  <div>
+    <form method="POST" action="/review">
+      <input type="hidden" name="isbn" value="{{ book["isbn"] }}">
+      <div class="row text-center">
+        <div class="col-sm-4">
+          {% if user_rating[0] == NULL %}
+          <!-- if the user has not voted, display voting form -->
+          <h6>You rate</h6>
+          <select class="form-control" name="rating" id="ratings">
+            <option value=1>1</option>
+            <option value=2>2</option>
+            <option value=3>3</option>
+            <option value=4>4</option>
+            <option selected value=5>5</option>
+          </select>
+          {% else %}
+          <!-- if so, display what user has rated -->
+          <h6>You rated</h6>
+          <p>{{ user_rating[0] }} stars for this book</p>
+          {% endif %}
+        </div>
+
+        {% if user_review[0] in (NULL, None) %}
+        <!-- if the user has note reviewed, display review form  -->
+        <div class="col-sm-6">
+          <h6>Write a customer review</h6>
+          <textarea class="form-control w-100" name="review" rows="1" required></textarea>
+        </div>
+        {% else %}
+        <!-- if so, display what user has written -->
+        <div class="col-sm-8">
+          <h6>You reviewed</h6>
+          <p class="orange">"{{ user_review[0] }}"</p>
+        </div>
+        {% endif %}
+
+        {% if user_review[0] == None or user_rating[0] == NULL %}
+        <!-- if one of the above forms exists, display the submit button -->
+        <div class="col-sm-2">
+          <button type="submit" class="btn btn-primary mt-4">Submit</button>
+        </div>
+        {% endif %}
+      </div>
+    </form>
+  </div>
+</div>
+
+</div>
+<hr>
+<!-- All reviews -->
+<table class="table table-stripped table-hover">
+  <tbody>
+    {% for review in reviews %}
+    <tr>
+      <div class="d-flex w-100 justify-content-between">
+        <h6><b>{{ review["username"] }}</b></h6>
+        <p>Rated {{ review["rating"] }} stars</p>
+        <p>reviewed on {{ review["recorded"] }}</p>
+      </div>
+      <h6 class="text-center violet">"{{ review["review"] }}"</h6>
+      <hr>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+
+<!-- QAs section -->
+<div class="mt-5 w-100" id="reviews">
+  <h4 class="alert alert-info text-center w-100">Questions and Answers</h4>
+  <!-- User asks question -->
+  <div>
+    <p class="text-center"><b>Want to know more about {{ book["title"] }}, ask Bookquery users</b></p>
+    <div class="text-center">
+      <form class="w-100" method="POST" action="/qa">
+        <input type="hidden" name="isbn" value="{{ book["isbn"] }}">
+        <div class="row">
+          <div class="col-sm-2"></div>
+          <div class="col-sm-8">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Question:</span>
+              </div>
+              <textarea class="form-control" name="qa_question" rows="1" required></textarea>
+              <div class="input-group-append">
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-2"></div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <hr>
+
+
+  <!-- Display all questions -->
+  <table class="table table-stripped table-hover">
+    <tbody>
+      {% for QA in QAs %}
+      <tr>
+        <div class="d-flex w-100 justify-content-between row">
+          <div class="col-sm-12">
+            <div class="text-break">
+              <span style="color:blue;"><b>{{ QA["username"] }}</b></span><span> asked: </span><i class="violet">"{{ QA["qa_question"] }}"</i> on {{ QA["recorded"] }}</p>
+            </div>
+          </div>
+          <!-- a form for user to add answers -->
+          <div class="col-sm-12 ml-5">
+            <form class="w-100" method="POST" action="/qa">
+              <input type="hidden" name="isbn" value="{{ book["isbn"] }}">
+              <input type="hidden" name="qa_id" value="{{ QA["qa_id"] }}">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Answer:</span>
+                </div>
+                <textarea class="form-control" name="response" rows="1" required></textarea>
+                <div class="input-group-append">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <!-- display all answer for each question -->
+          <div class="col-sm-12 ml-5">
+            <p class="mb-0"><b>Answers:</b></p>
+            <ul>
+              {% for response in responses %}
+              {% if response[2] == QA[0] %}
+              <li style="list-style-type: circle;">
+                <b>{{ response["username"] }}</b> answer: <span class="orange"><i>"{{ response["response"] }}"</i></span> on {{ response["recorded"] }}
+              </li>
+              {% endif %}
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+        <hr>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endblock %}

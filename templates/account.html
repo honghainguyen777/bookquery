@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Change password
+{% endblock %}
+
+{% block main %}
+<!-- Password change -->
+<div class="container">
+  <div class="d-flex justify-content-center h-100">
+    <!-- Create a card for the form -->
+    <div class="card">
+      <div class="card-header" style="text-align:center;">
+        <h4>Change Password</h4>
+      </div>
+      <div class="card-body">
+        <form action="/account" method="post">
+          <div class="input-group form-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fas fa-key"></i></span>
+            </div>
+            <input type="password" name="password" class="form-control" placeholder="password" required>
+          </div>
+          <div class="input-group form-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fas fa-key"></i></span>
+            </div>
+            <input type="password" name="new_password" class="form-control" placeholder="New password" required>
+          </div>
+          <div class="input-group form-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fas fa-key"></i></span>
+            </div>
+            <input type="password" name="confirmation" class="form-control" placeholder="Repeat new password" required>
+          </div>
+          <div class="form-group" style="text-align:center;">
+            <button type="submit" class="btn btn-primary">Change</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
