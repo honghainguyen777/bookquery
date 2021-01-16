@@ -2,7 +2,7 @@
 
 ## Visit and try this app on Heroku
 
-### http://bookquery.herokuaapp.com/
+### http://bookquery.herokuapp.com/
 
 ## Features of the app
 
